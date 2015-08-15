@@ -45,6 +45,16 @@ main(List<String> args) {
       r"$type": "number",
       r"$writable": "write",
       "?value": max
+    },
+    "Node_Count": {
+      r"$name": "Node Count",
+      r"$type": "number",
+      "?value": 0
+    },
+    "Metrics_Count": {
+      r"$name": "Metrics Count",
+      r"$type": "number",
+      "?value": 0
     }
   }, profiles: {
     "generate": (String path) => new SimpleActionNode(path, (Map<String, dynamic> params) {
@@ -103,6 +113,7 @@ main(List<String> args) {
   link.connect();
 
   link.val("/Tick_Rate", millis);
+  link.val("/Metrics_Count", rngPer);
 
   schedule = Scheduler.every(new Interval.forMilliseconds(millis), update);
 
@@ -146,4 +157,6 @@ void generate(int count) {
     link.addNode("/Node_${i}", m);
     current++;
   }
+
+  link.val("/Node_Count", nodes.length);
 }

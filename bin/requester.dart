@@ -24,11 +24,8 @@ main(List<String> args) async {
   link.connect();
   r = await link.onRequesterReady;
 
-  RemoteNode root = await getRemoteNode(benchmarkPath);
-  List<RemoteNode> nodes = await Future.wait(root.children.values.map((RemoteNode x) => getRemoteNode(x.remotePath)));
-  List<RemoteNode> metrics = await Future.wait(nodes
-    .expand((RemoteNode n) => n.children.values.map(
-      (RemoteNode c) => getRemoteNode(c.remotePath))));
+  Map<String, RemoteNode> nodes = await getRemoteNodeRecursive(benchmarkPath);
+  List<RemoteNode> metrics = nodes.values.where((x) => x.configs.containsKey(r"$type")).toList();
 
   var count = 0;
 
@@ -43,6 +40,18 @@ main(List<String> args) async {
     count = 0;
     print("Count: ${c}");
   });
+}
+
+Future<Map<String, RemoteNode>> getRemoteNodeRecursive(String path) async {
+  var root = await getRemoteNode(path);
+  var map = {};
+  map[path] = root;
+
+  for (RemoteNode child in root.children.values) {
+    map.addAll(await getRemoteNodeRecursive(child.remotePath));
+  }
+
+  return map;
 }
 
 Future<RemoteNode> getRemoteNode(String path) async {

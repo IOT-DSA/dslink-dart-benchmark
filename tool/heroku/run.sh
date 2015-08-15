@@ -17,7 +17,14 @@ cleanup() {
 }
 trap "cleanup" INT QUIT TERM EXIT
 
-rm -rf conns.json broker.json
+rm -rf conns.json broker.json tmp
+
+mkdir tmp
+cd tmp
+wget https://github.com/IOT-DSA/links/raw/gh-pages/files/system.zip
+unzip system.zip -d System
+rm system.zip
+cd ..
 
 export BROKER_PORT=${PORT}
 dart .pub/bin/dslink/broker.dart.snapshot --docker &
@@ -25,6 +32,8 @@ BROKER_PID=$!
 sleep 5
 dart bin/responder.dart --broker http://127.0.0.1:${PORT}/conn ${RESPONDER_CONFIG} &
 RESPONDER_PID=$!
+dart tmp/System/bin/run.dart --broker http://127.0.0.1:${PORT}/conn &
+SYSTEM_PID=$1
 sleep 10
 REQUESTER_PID=""
 for i in $(seq 1 ${REQUESTER_COUNT})
@@ -55,4 +64,4 @@ waitall() { # PID...
   ((errors == 0))
 }
 
-waitall ${BROKER_PID} ${RESPONDER_PID} ${REQUESTER_PID}
+waitall ${BROKER_PID} ${RESPONDER_PID} ${REQUESTER_PID} ${SYSTEM_PID}

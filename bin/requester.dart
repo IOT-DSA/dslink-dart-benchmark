@@ -15,7 +15,12 @@ main(List<String> args) async {
   argp.addOption("sample", help: "Sample Rate", defaultsTo: "1000");
   argp.addOption("id", help: "Requester ID");
 
-  link = new LinkProvider(args, "Benchmarker-", isRequester: true, isResponder: false, autoInitialize: false);
+  link = new LinkProvider(args, "Benchmarker-", isRequester: true, isResponder: true, defaultNodes: {
+    "Count": {
+      r"$type": "int",
+      "?value": 0
+    }
+  }, autoInitialize: false);
 
   link.configure(argp: argp, optionsHandler: (opts) {
     benchmarkPath = opts["path"];
@@ -46,6 +51,8 @@ main(List<String> args) async {
     } else {
       print("Count: ${c}");
     }
+
+    link.updateValue("/Count", count);
   });
 }
 

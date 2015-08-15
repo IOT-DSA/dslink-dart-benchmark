@@ -3,7 +3,7 @@
 export RESPONDER_COUNT=${REQUESTER_COUNT}
 export PATH=${PATH}:${PWD}/dart-sdk/bin
 
-sleep 10
+sleep 2
 
 cleanup() {
   echo "Cleaning up..."
@@ -16,7 +16,7 @@ trap "cleanup" INT QUIT TERM EXIT
 RESPONDER_PID=""
 for i in $(seq 1 ${RESPONDER_COUNT})
 do
-  dart bin/responder.dart --broker http://127.0.0.1:${PORT}/conn ${RESPONDER_CONFIG} --name="Benchmark-${i}" &
+  dart bin/responder.dart --broker https://dsa-benchmarks.herokuapp.com/conn ${RESPONDER_CONFIG} --name="Benchmark-${i}" &
   RESPONDER_PID="$RESPONDER_PID $!"
 done
 

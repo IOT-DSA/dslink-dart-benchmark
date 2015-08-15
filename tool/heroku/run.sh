@@ -22,10 +22,10 @@ rm -rf conns.json broker.json
 export BROKER_PORT=${PORT}
 dart .pub/bin/dslink/broker.dart.snapshot --docker &
 BROKER_PID=$!
-sleep 2
-dart bin/responder.dart --broker http://127.0.0.1:${PORT}/conn &
+sleep 5
+dart bin/responder.dart --broker http://127.0.0.1:${PORT}/conn ${RESPONDER_CONFIG} &
 RESPONDER_PID=$!
-sleep 2
+sleep 10
 REQUESTER_PID=""
 for i in $(seq 1 ${REQUESTER_COUNT})
 do

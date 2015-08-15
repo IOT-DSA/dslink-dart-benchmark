@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export PATH=${PATH}:${PWD}/dart-sdk/bin
+
 REQUESTER_COUNT="${REQUESTER_COUNT}"
 
 if [ -z ${REQUESTER_COUNT} ]

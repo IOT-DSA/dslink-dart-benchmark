@@ -33,7 +33,7 @@ sleep 5
 dart bin/responder.dart --broker http://127.0.0.1:${PORT}/conn ${RESPONDER_CONFIG} &
 RESPONDER_PID=$!
 cd tmp
-dart tmp/System/bin/run.dart --broker http://127.0.0.1:${PORT}/conn &
+dart System/bin/run.dart --broker http://127.0.0.1:${PORT}/conn &
 SYSTEM_PID=$!
 cd ..
 sleep 10

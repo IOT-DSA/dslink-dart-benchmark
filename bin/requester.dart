@@ -8,12 +8,14 @@ Requester r;
 String benchmarkPath;
 int sampleRate;
 String rid;
+bool silent = false;
 
 main(List<String> args) async {
   var argp = new ArgParser();
   argp.addOption("path", help: "Responder Path", defaultsTo: "/downstream/Benchmark");
   argp.addOption("sample", help: "Sample Rate", defaultsTo: "1000");
   argp.addOption("id", help: "Requester ID");
+  argp.addFlag("silent", help: "Silent Mode", defaultsTo: false);
 
   link = new LinkProvider(args, "Benchmarker-", isRequester: true, isResponder: true, defaultNodes: {
     "Count": {
@@ -26,6 +28,7 @@ main(List<String> args) async {
     benchmarkPath = opts["path"];
     sampleRate = int.parse(opts["sample"]);
     rid = opts["id"];
+    silent = opts["silent"];
   });
 
   link.init();
@@ -46,10 +49,12 @@ main(List<String> args) async {
   Scheduler.every(new Interval.forMilliseconds(sampleRate), () {
     var c = count;
     count = 0;
-    if (rid != null) {
-      print("${rid} - Count: ${c}");
-    } else {
-      print("Count: ${c}");
+    if (!silent) {
+      if (rid != null) {
+        print("${rid} - Count: ${c}");
+      } else {
+        print("Count: ${c}");
+      }
     }
 
     link.val("/Count", c);

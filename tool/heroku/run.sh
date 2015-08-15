@@ -9,8 +9,6 @@ then
  REQUESTER_COUNT="2"
 fi
 
-echo ${REQUESTER_COUNT}
-
 cleanup() {
   echo "Cleaning up..."
   local pids=$(jobs -pr)
@@ -31,7 +29,7 @@ sleep 2
 REQUESTER_PID=""
 for i in $(seq 1 ${REQUESTER_COUNT})
 do
-  dart bin/requester.dart --broker http://127.0.0.1:${PORT}/conn --path /conns/Benchmark --id "Requester ${i}" --name="Benchmarker-${i}" &
+  dart bin/requester.dart --broker http://127.0.0.1:${PORT}/conn --path /conns/Benchmark --silent --id "Requester ${i}" --name="Benchmarker-${i}" &
   REQUESTER_PID="$REQUESTER_PID $!"
 done
 

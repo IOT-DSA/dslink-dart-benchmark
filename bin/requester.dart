@@ -52,7 +52,7 @@ main(List<String> args) async {
       print("Count: ${c}");
     }
 
-    link.updateValue("/Count", count);
+    link.val("/Count", c);
   });
 }
 

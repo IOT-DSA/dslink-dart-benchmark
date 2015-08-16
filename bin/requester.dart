@@ -24,7 +24,8 @@ main(List<String> args) async {
     },
     "Percentage": {
       r"$type": "number",
-      "?value": 0
+      "?value": 0,
+      "@unit": "%"
     }
   }, autoInitialize: false);
 
@@ -71,7 +72,7 @@ main(List<String> args) async {
     }
 
     link.val("/Count", c);
-    link.val("/Percentage", c / mc);
+    link.val("/Percentage", (c / mc) * 10);
   });
 }
 

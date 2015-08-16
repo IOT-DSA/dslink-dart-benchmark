@@ -23,7 +23,7 @@ REQUESTER_PID=""
 for i in $(seq 1 ${REQUESTER_COUNT})
 do
   DID="$((${DYNO##*.} - 1))"
-  X="$((${i} + (${DID} * 5)))"
+  X="$((${i} + (${DID} * ${REQUESTER_COUNT})))"
   NAME="Benchmarker-${X}"
   dart bin/requester.dart --broker https://dsa-benchmarks.herokuapp.com/conn --path "/conns" --silent --id "Requester ${X}" --name="${NAME}" &
   REQUESTER_PID="$REQUESTER_PID $!"

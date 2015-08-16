@@ -12,7 +12,7 @@ bool silent = false;
 
 main(List<String> args) async {
   var argp = new ArgParser();
-  argp.addOption("path", help: "Responder Path", defaultsTo: "/downstream");
+  argp.addOption("path", help: "Responder Path", defaultsTo: "/conns");
   argp.addOption("sample", help: "Sample Rate", defaultsTo: "1000");
   argp.addOption("id", help: "Requester ID");
   argp.addFlag("silent", help: "Silent Mode", defaultsTo: false);
@@ -39,7 +39,9 @@ main(List<String> args) async {
   link.connect();
   r = await link.onRequesterReady;
 
-  Map<String, RemoteNode> nodes = await getRemoteNodeRecursive(benchmarkPath);
+  Map<String, RemoteNode> nodes = await getRemoteNodeRecursive(benchmarkPath, ignore: (String path) {
+    return path.startsWith("/conns/rnd");
+  });
   List<RemoteNode> metrics = nodes.values.where((x) => x.configs.containsKey(r"$type")).toList();
 
   var count = 0;
@@ -61,23 +63,32 @@ main(List<String> args) async {
     if (!silent) {
       if (rid != null) {
         print("${rid} - Count: ${c}");
+        print("${rid} - Percentage: ${c / mc}");
       } else {
         print("Count: ${c}");
+        print("Percentage: ${c / mc}");
       }
     }
 
     link.val("/Count", c);
-    link.val("/Percentage", (c / mc) * 100);
+    link.val("/Percentage", c / mc);
   });
 }
 
-Future<Map<String, RemoteNode>> getRemoteNodeRecursive(String path) async {
+Future<Map<String, RemoteNode>> getRemoteNodeRecursive(String path, {bool ignore(String path)}) async {
+  if (ignore != null) {
+    var result = ignore(path);
+    if (result) {
+      return {};
+    }
+  }
+
   var root = await getRemoteNode(path);
   var map = {};
   map[path] = root;
 
   for (RemoteNode child in root.children.values) {
-    map.addAll(await getRemoteNodeRecursive(child.remotePath));
+    map.addAll(await getRemoteNodeRecursive(child.remotePath, ignore: ignore));
   }
 
   return map;

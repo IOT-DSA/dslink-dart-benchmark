@@ -61,8 +61,10 @@ main(List<String> args) async {
       }
     }
   }
-  
+
   mc = paths.length;
+
+  print("Metrics Count: ${mc}");
 
   for (String path in paths) {
     r.subscribe(path, (ValueUpdate update) {

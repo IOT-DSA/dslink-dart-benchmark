@@ -21,6 +21,9 @@ main(List<String> args) async {
     "Count": {
       r"$type": "int",
       "?value": 0
+    },
+    "Percentage": {
+
     }
   }, autoInitialize: false);
 
@@ -39,11 +42,16 @@ main(List<String> args) async {
   List<RemoteNode> metrics = nodes.values.where((x) => x.configs.containsKey(r"$type")).toList();
 
   var count = 0;
+  var mc = 0;
 
   for (RemoteNode metric in metrics) {
-    r.subscribe(metric.remotePath, (ValueUpdate update) {
-      count++;
-    });
+    var path = new Path(metric.remotePath);
+    if (path.name.startsWith("Metric_") && path.name != "Metric_Count") {
+      mc++;
+      r.subscribe(metric.remotePath, (ValueUpdate update) {
+        count++;
+      });
+    }
   }
 
   Scheduler.every(new Interval.forMilliseconds(sampleRate), () {
@@ -58,6 +66,7 @@ main(List<String> args) async {
     }
 
     link.val("/Count", c);
+    link.val("/Percentage", (count / mc) * 100);
   });
 }
 

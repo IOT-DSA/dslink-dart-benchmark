@@ -72,7 +72,7 @@ main(List<String> args) async {
     }
 
     link.val("/Count", c);
-    link.val("/Percentage", (c / mc) * 10);
+    link.val("/Percentage", ((c / mc) * 10).clamp(0, 100));
   });
 }
 

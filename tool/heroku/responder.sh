@@ -17,7 +17,8 @@ RESPONDER_PID=""
 for i in $(seq 1 ${RESPONDER_COUNT})
 do
   NAME="Benchmark-$((${DYNO##*.} * ${i}))"
-  dart bin/responder.dart --broker https://dsa-benchmarks.herokuapp.com/conn ${RESPONDER_CONFIG} --name=${NAME} &
+  echo "My Name is ${NAME}"
+  dart bin/responder.dart --broker https://dsa-benchmarks.herokuapp.com/conn ${RESPONDER_CONFIG} --name="${NAME}" &
   RESPONDER_PID="$RESPONDER_PID $!"
 done
 

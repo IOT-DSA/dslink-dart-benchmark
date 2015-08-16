@@ -25,6 +25,7 @@ do
   X="$((${DYNO##*.} * ${i}))"
   BNAME="Benchmark-${X}"
   NAME="Benchmarker-${X}"
+  echo "My Name is ${NAME} and I subscribe to ${BNAME}"
   dart bin/requester.dart --broker https://dsa-benchmarks.herokuapp.com/conn --path "/conns/${BNAME}" --silent --id "Requester ${X}" --name="${NAME}" &
   REQUESTER_PID="$REQUESTER_PID $!"
 done

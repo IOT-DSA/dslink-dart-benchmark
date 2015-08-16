@@ -23,7 +23,8 @@ main(List<String> args) async {
       "?value": 0
     },
     "Percentage": {
-
+      r"$type": "number",
+      "?value": 0
     }
   }, autoInitialize: false);
 

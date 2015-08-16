@@ -16,7 +16,8 @@ trap "cleanup" INT QUIT TERM EXIT
 RESPONDER_PID=""
 for i in $(seq 1 ${RESPONDER_COUNT})
 do
-  dart bin/responder.dart --broker https://dsa-benchmarks.herokuapp.com/conn ${RESPONDER_CONFIG} --name="Benchmark-${i}" &
+  NAME="Benchmark-$((${DYNO##*.} * ${i}))"
+  dart bin/responder.dart --broker https://dsa-benchmarks.herokuapp.com/conn ${RESPONDER_CONFIG} --name=${NAME} &
   RESPONDER_PID="$RESPONDER_PID $!"
 done
 

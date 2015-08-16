@@ -26,6 +26,8 @@ do
 
   X="$((${DID} * ${i}))"
 
+  echo "DYNO #${DID}"
+
   if $((${DID} > 1))
   then
     X=$((${X} + 1))

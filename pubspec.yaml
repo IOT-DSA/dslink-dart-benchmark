@@ -2,4 +2,6 @@ name: dslink_benchmark
 description: DSA Benchmark DSLink
 dependencies:
   dslink:
-    git: https://github.com/IOT-DSA/sdk-dslink-dart.git
+    git:
+      url: https://github.com/IOT-DSA/sdk-dslink-dart.git
+      ref: develop

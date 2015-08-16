@@ -40,22 +40,34 @@ main(List<String> args) async {
   link.connect();
   r = await link.onRequesterReady;
 
-  Map<String, RemoteNode> nodes = await getRemoteNodeRecursive(benchmarkPath, ignore: (String path) {
-    return path.startsWith("/conns/rnd");
-  });
-  List<RemoteNode> metrics = nodes.values.where((x) => x.configs.containsKey(r"$type")).toList();
+  RemoteNode conns = await getRemoteNode("/conns");
+  List<RemoteNode> cn = conns.children.values.toList();
 
   var count = 0;
   var mc = 0;
 
-  for (RemoteNode metric in metrics) {
-    var path = new Path(metric.remotePath);
-    if (metric.remotePath.startsWith("/conns/Benchmark-") && path.name.startsWith("Metric_") && path.name != "Metric_Count") {
-      mc++;
-      r.subscribe(metric.remotePath, (ValueUpdate update) {
-        count++;
-      });
+  var paths = [];
+
+  for (var n in cn) {
+    if (!n.remotePath.startsWith("/conns/Benchmark-")) {
+      continue;
     }
+
+    var nc = await getNodeValue(n.remotePath + "/Node_Count");
+    var mc = await getNodeValue(n.remotePath + "/Metrics_Count");
+    for (var a = 1; a <= nc; a++) {
+      for (var b = 1; b <= mc; b++) {
+        paths.add(n.remotePath + "/Node_${a}/Metric_${b}");
+      }
+    }
+  }
+  
+  mc = paths.length;
+
+  for (String path in paths) {
+    r.subscribe(path, (ValueUpdate update) {
+      count++;
+    });
   }
 
   Scheduler.every(new Interval.forMilliseconds(sampleRate), () {
@@ -100,3 +112,12 @@ Future<RemoteNode> getRemoteNode(String path) async {
 }
 
 
+Future<ValueUpdate> getNodeValue(String path) async {
+  var c = new Completer<ValueUpdate>();
+  ReqSubscribeListener l;
+  l = r.subscribe(path, (ValueUpdate update) {
+    c.complete(update.value);
+    l.cancel();
+  });
+  return await c.future;
+}

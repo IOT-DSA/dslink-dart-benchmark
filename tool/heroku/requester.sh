@@ -24,11 +24,8 @@ for i in $(seq 1 ${REQUESTER_COUNT})
 do
   DID="$((${DYNO##*.} - 1))"
   X="$((${i} + (${DID} * 5)))"
-
-  BNAME="Benchmark-${X}"
   NAME="Benchmarker-${X}"
-  echo "My Name is ${NAME} and I subscribe to ${BNAME}"
-  dart bin/requester.dart --broker https://dsa-benchmarks.herokuapp.com/conn --path "/conns/${BNAME}" --silent --id "Requester ${X}" --name="${NAME}" &
+  dart bin/requester.dart --broker https://dsa-benchmarks.herokuapp.com/conn --path "/conns" --silent --id "Requester ${X}" --name="${NAME}" &
   REQUESTER_PID="$REQUESTER_PID $!"
 done
 

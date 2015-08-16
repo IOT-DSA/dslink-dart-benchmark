@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-export RESPONDER_COUNT=${REQUESTER_COUNT}
+RESPONDER_COUNT="${RESPONDER_COUNT}"
+
+if [ -z ${RESPONDER_COUNT} ]
+then
+ RESPONDER_COUNT="2"
+fi
+
 export PATH=${PATH}:${PWD}/dart-sdk/bin
 
 sleep 2
@@ -19,7 +25,6 @@ do
   DID="$((${DYNO##*.} - 1))"
   X="$((${i} + (${DID} * 5)))"
   NAME="Benchmark-${X}"
-  echo "My Name is ${NAME}"
   dart bin/responder.dart --broker https://dsa-benchmarks.herokuapp.com/conn ${RESPONDER_CONFIG} --name="${NAME}" &
   RESPONDER_PID="$RESPONDER_PID $!"
 done

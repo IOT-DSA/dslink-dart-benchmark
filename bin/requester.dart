@@ -47,7 +47,7 @@ main(List<String> args) async {
 
   for (RemoteNode metric in metrics) {
     var path = new Path(metric.remotePath);
-    if (path.name.startsWith("Metric_") && path.name != "Metric_Count") {
+    if (path.parent.name.startsWith("Node_") && path.name.startsWith("Metric_") && path.name != "Metric_Count") {
       mc++;
       r.subscribe(metric.remotePath, (ValueUpdate update) {
         count++;
@@ -67,7 +67,7 @@ main(List<String> args) async {
     }
 
     link.val("/Count", c);
-    link.val("/Percentage", (count / mc) * 100);
+    link.val("/Percentage", (c / mc) * 100);
   });
 }
 

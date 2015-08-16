@@ -16,8 +16,9 @@ trap "cleanup" INT QUIT TERM EXIT
 RESPONDER_PID=""
 for i in $(seq 1 ${RESPONDER_COUNT})
 do
-  X="$((${DYNO##*.} * ${i}))"
-  if $((${X} > 1))
+  DID="${DYNO##*.}"
+  X="$((${DID} * ${i}))"
+  if $((${DID} > 1))
   then
     X=$((${X} + 1))
   fi

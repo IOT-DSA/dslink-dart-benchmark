@@ -22,9 +22,11 @@ trap "cleanup" INT QUIT TERM EXIT
 REQUESTER_PID=""
 for i in $(seq 1 ${REQUESTER_COUNT})
 do
-  X="$((${DYNO##*.} * ${i}))"
+  DID="${DYNO##*.}"
 
-  if $((${X} > 1))
+  X="$((${DID} * ${i}))"
+
+  if $((${DID} > 1))
   then
     X=$((${X} + 1))
   fi

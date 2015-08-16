@@ -128,10 +128,10 @@ int max = 100;
 int rngPer = 0;
 
 void update() {
+  flag = !flag;
   nodes.forEach((node) {
     node.children.forEach((k, n) {
       if (n.hasSubscriber) {
-        flag = !flag;
         n.updateValue(flag ? 1 : 0);
       }
     });

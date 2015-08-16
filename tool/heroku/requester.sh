@@ -23,6 +23,12 @@ REQUESTER_PID=""
 for i in $(seq 1 ${REQUESTER_COUNT})
 do
   X="$((${DYNO##*.} * ${i}))"
+
+  if $((${X} > 1))
+  then
+    X=$((${X} + 1))
+  fi
+
   BNAME="Benchmark-${X}"
   NAME="Benchmarker-${X}"
   echo "My Name is ${NAME} and I subscribe to ${BNAME}"

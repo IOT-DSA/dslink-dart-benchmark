@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 REQUESTER_COUNT="${REQUESTER_COUNT}"
+#URL="https://dsa-benchmarks.herokuapp.com/conn"
+URL="http://titan.directcode.org:8094/conn"
 
 if [ -z ${REQUESTER_COUNT} ]
 then
@@ -25,7 +27,7 @@ do
   DID="$((${DYNO##*.} - 1))"
   X="$((${i} + (${DID} * ${REQUESTER_COUNT})))"
   NAME="Benchmarker-${X}"
-  dart bin/requester.dart --broker https://dsa-benchmarks.herokuapp.com/conn --path "/conns" --silent --id "Requester ${X}" --name="${NAME}" &
+  dart bin/requester.dart --broker ${URL} --path "/conns" --silent --id "Requester ${X}" --name="${NAME}" &
   REQUESTER_PID="$REQUESTER_PID $!"
 done
 

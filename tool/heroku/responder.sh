@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 RESPONDER_COUNT="${RESPONDER_COUNT}"
+#URL="https://dsa-benchmarks.herokuapp.com/conn"
+URL="http://titan.directcode.org:8094/conn"
 
 if [ -z ${RESPONDER_COUNT} ]
 then
@@ -25,7 +27,7 @@ do
   DID="$((${DYNO##*.} - 1))"
   X="$((${i} + (${DID} * ${RESPONDER_COUNT})))"
   NAME="Benchmark-${X}"
-  dart bin/responder.dart --broker https://dsa-benchmarks.herokuapp.com/conn ${RESPONDER_CONFIG} --name="${NAME}" &
+  dart bin/responder.dart --broker ${URL} ${RESPONDER_CONFIG} --name="${NAME}" &
   RESPONDER_PID="$RESPONDER_PID $!"
 done
 

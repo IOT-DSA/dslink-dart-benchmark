@@ -9,7 +9,7 @@ fi
 
 export PATH=${PATH}:${PWD}/dart-sdk/bin
 
-sleep 10
+sleep 20
 
 cleanup() {
   echo "Cleaning up..."

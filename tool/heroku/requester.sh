@@ -22,16 +22,8 @@ trap "cleanup" INT QUIT TERM EXIT
 REQUESTER_PID=""
 for i in $(seq 1 ${REQUESTER_COUNT})
 do
-  DID="${DYNO##*.}"
-
-  X="$((${DID} * ${i}))"
-
-  echo "DYNO #${DID}"
-
-  if [ ${DID} -gt 1 ]
-  then
-    X=$((${X} + 1))
-  fi
+  DID="$((${DYNO##*.} - 1))"
+  X="$((${i} + (${DID} * 5)))"
 
   BNAME="Benchmark-${X}"
   NAME="Benchmarker-${X}"

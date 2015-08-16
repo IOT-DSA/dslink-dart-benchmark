@@ -12,7 +12,7 @@ bool silent = false;
 
 main(List<String> args) async {
   var argp = new ArgParser();
-  argp.addOption("path", help: "Responder Path", defaultsTo: "/downstream/Benchmark");
+  argp.addOption("path", help: "Responder Path", defaultsTo: "/downstream");
   argp.addOption("sample", help: "Sample Rate", defaultsTo: "1000");
   argp.addOption("id", help: "Requester ID");
   argp.addFlag("silent", help: "Silent Mode", defaultsTo: false);
@@ -47,7 +47,7 @@ main(List<String> args) async {
 
   for (RemoteNode metric in metrics) {
     var path = new Path(metric.remotePath);
-    if (path.parent.name.startsWith("Node_") && path.name.startsWith("Metric_") && path.name != "Metric_Count") {
+    if (metric.remotePath.startsWith("/conns/Benchmark-") && path.name.startsWith("Metric_") && path.name != "Metric_Count") {
       mc++;
       r.subscribe(metric.remotePath, (ValueUpdate update) {
         count++;

@@ -28,7 +28,7 @@ do
 
   echo "DYNO #${DID}"
 
-  if $((${DID} > 1))
+  if [ ${DID} -gt 1 ]
   then
     X=$((${X} + 1))
   fi

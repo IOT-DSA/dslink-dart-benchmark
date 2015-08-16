@@ -18,7 +18,7 @@ for i in $(seq 1 ${RESPONDER_COUNT})
 do
   DID="${DYNO##*.}"
   X="$((${DID} * ${i}))"
-  if $((${DID} > 1))
+  if [ ${DID} -gt 1 ]
   then
     X=$((${X} + 1))
   fi

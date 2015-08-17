@@ -69,7 +69,7 @@ main(List<String> args) async {
   for (String path in paths) {
     r.subscribe(path, (ValueUpdate update) {
       count++;
-    });
+    }, 1);
   }
 
   Scheduler.every(new Interval.forMilliseconds(sampleRate), () {
@@ -112,7 +112,6 @@ Future<Map<String, RemoteNode>> getRemoteNodeRecursive(String path, {bool ignore
 Future<RemoteNode> getRemoteNode(String path) async {
   return (await r.list(path).first).node;
 }
-
 
 Future<ValueUpdate> getNodeValue(String path) async {
   var c = new Completer<ValueUpdate>();

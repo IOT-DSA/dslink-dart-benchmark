@@ -40,7 +40,7 @@ main(List<String> args) async {
   link.connect();
   r = await link.onRequesterReady;
 
-  RemoteNode conns = await getRemoteNode("/conns");
+  RemoteNode conns = await getRemoteNode("/downstream");
   List<RemoteNode> cn = conns.children.values.toList();
 
   var count = 0;
@@ -49,7 +49,7 @@ main(List<String> args) async {
   var paths = [];
 
   for (var n in cn) {
-    if (!n.remotePath.startsWith("/conns/Benchmark-")) {
+    if (!n.remotePath.startsWith("/downstream/Benchmark-")) {
       continue;
     }
 

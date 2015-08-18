@@ -113,8 +113,8 @@ Future<RemoteNode> getRemoteNode(String path) async {
   return (await r.list(path).first).node;
 }
 
-Future<ValueUpdate> getNodeValue(String path) async {
-  var c = new Completer<ValueUpdate>();
+Future<Object> getNodeValue(String path) async {
+  var c = new Completer<Object>();
   ReqSubscribeListener l;
   l = r.subscribe(path, (ValueUpdate update) {
     c.complete(update.value);

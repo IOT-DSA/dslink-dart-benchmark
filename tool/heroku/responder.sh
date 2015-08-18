@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 RESPONDER_COUNT="${RESPONDER_COUNT}"
-URL="http://dsa-benchmarks.herokuapp.com/conn"
+#URL="http://dsa-benchmarks.herokuapp.com/conn"
 #URL="http://titan.directcode.org:8094/conn"
+URL="http://benchmark.iot-dsa.org/conn"
 
 if [ -z ${RESPONDER_COUNT} ]
 then

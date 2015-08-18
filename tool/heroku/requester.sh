@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 REQUESTER_COUNT="${REQUESTER_COUNT}"
-URL="http://dsa-benchmarks.herokuapp.com/conn"
-#URL="http://titan.directcode.org:8094/conn"
+#URL="http://dsa-benchmarks.herokuapp.com/conn"
+URL="http://titan.directcode.org:8094/conn"
 
 if [ -z ${REQUESTER_COUNT} ]
 then

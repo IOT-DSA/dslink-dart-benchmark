@@ -69,7 +69,7 @@ main(List<String> args) async {
   for (String path in paths) {
     r.subscribe(path, (ValueUpdate update) {
       count++;
-    }, 1);
+    });
   }
 
   Scheduler.every(new Interval.forMilliseconds(sampleRate), () {

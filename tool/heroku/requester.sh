@@ -3,7 +3,7 @@
 REQUESTER_COUNT="${REQUESTER_COUNT}"
 #URL="http://dsa-benchmarks.herokuapp.com/conn"
 #URL="http://titan.directcode.org:8094/conn"
-URL="http://benchmark.iot-dsa.org/conn"
+URL="http://benchmark.iot-dsa.org:8100/conn"
 
 if [ -z ${REQUESTER_COUNT} ]
 then

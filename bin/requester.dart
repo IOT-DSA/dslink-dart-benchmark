@@ -12,7 +12,7 @@ bool silent = false;
 
 main(List<String> args) async {
   var argp = new ArgParser();
-  argp.addOption("path", help: "Responder Path", defaultsTo: "/conns");
+  argp.addOption("path", help: "Responder Path", defaultsTo: "/downstream");
   argp.addOption("sample", help: "Sample Rate", defaultsTo: "1000");
   argp.addOption("id", help: "Requester ID");
   argp.addFlag("silent", help: "Silent Mode", defaultsTo: false);

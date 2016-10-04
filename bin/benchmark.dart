@@ -12,7 +12,8 @@ main(List<String> args) async {
     'http://localhost:8080/conn',
     '--nodes=10',
     '--metrics=10',
-    '--interval=10'
+    '--interval=10',
+    '--type=1'
   ]);
 
   var benchmarkRequester = new BenchmarkRequester([
@@ -22,6 +23,9 @@ main(List<String> args) async {
     '--path /downstream/Benchmark'
   ]);
 
+  print("starting responder");
   await benchmarkResponder.start();
+  print("starting requester");
   await benchmarkRequester.start();
+  print("started");
 }

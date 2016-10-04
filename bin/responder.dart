@@ -6,14 +6,22 @@ import "package:args/args.dart";
 import "package:dslink/dslink.dart";
 import "package:dslink/nodes.dart";
 
-
+class UpdateType {
+  static const int IntegerFlip = 0;
+  static const int JsonMessage = 1;
+}
 
 class BenchmarkResponder {
-  LinkProvider link;
   int current = 0;
   int nodeCount = 0;
   int millis = 0;
+  int updateType = UpdateType.IntegerFlip;
+  LinkProvider link;
+  Function update;
 
+  // UpdateType specific variables
+  bool flag = false;
+  int counter = 0;
 
   BenchmarkResponder(List<String> args) {
     link = new LinkProvider(args, "Benchmark-", defaultNodes: {
@@ -90,13 +98,28 @@ class BenchmarkResponder {
     argp.addOption("nodes", help: "Node Count", defaultsTo: "10");
     argp.addOption("interval", help: "RNG Update Interval", defaultsTo: "10");
     argp.addOption("metrics", help: "Metrics Count", defaultsTo: "10");
+    argp.addOption("type", help: "Update Type", defaultsTo: UpdateType.IntegerFlip.toString());
     link.configure(argp: argp, optionsHandler: (opts) {
       nodeCount = int.parse(opts["nodes"]);
       millis = int.parse(opts["interval"]);
       rngPer = int.parse(opts["metrics"]);
+      updateType = int.parse(opts["type"]);
     });
 
     link.init();
+
+    switch (this.updateType)
+    {
+      case UpdateType.JsonMessage:
+        print("a");
+        this.update = this.JsonMessage;
+        break;
+      case UpdateType.IntegerFlip:
+      default:
+        print("b");
+        this.update = this.IntegerFlip;
+      break;
+    }
 
     link.onValueChange("/Tick_Rate").listen((ValueUpdate u) {
       if (schedule != null) {
@@ -104,7 +127,7 @@ class BenchmarkResponder {
         schedule = null;
       }
 
-      schedule = Scheduler.every(new Interval.forMilliseconds(u.value), update);
+      schedule = Scheduler.every(new Interval.forMilliseconds(u.value), this.update);
     });
 
     link.onValueChange("/RNG_Maximum").listen((ValueUpdate u) {
@@ -120,7 +143,7 @@ class BenchmarkResponder {
     link.val("/Tick_Rate", millis);
     link.val("/Metrics_Count", rngPer);
 
-    schedule = Scheduler.every(new Interval.forMilliseconds(millis), update);
+    schedule = Scheduler.every(new Interval.forMilliseconds(millis), this.update);
 
     print("Benchmark Configuration:");
     print("  ${nodeCount} nodes");
@@ -148,6 +171,36 @@ class BenchmarkResponder {
 
     link.val("/Node_Count", nodes.length);
   }
+
+  Function JsonMessage()
+  {
+    Map message = {
+      "msgNum": this.counter,
+      "msg": randomString(64)
+    };
+
+    nodes.forEach((node) {
+      node.children.forEach((k, n) {
+        if (n.hasSubscriber) {
+          n.updateValue(message);
+        }
+      });
+    });
+
+    counter++;
+  }
+
+  Function IntegerFlip()
+  {
+    flag = !flag;
+    nodes.forEach((node) {
+      node.children.forEach((k, n) {
+        if (n.hasSubscriber) {
+          n.updateValue(flag ? 1 : 0);
+        }
+      });
+    });
+  }
 }
 
 main(List<String> args) {
@@ -155,22 +208,20 @@ main(List<String> args) {
   br.start();
 }
 
+String randomString(int length) {
+  var codeUnits = new List.generate(
+      length,
+      (index){
+    return random.nextInt(33)+89;
+  }
+  );
+
+  return new String.fromCharCodes(codeUnits);
+}
+
 Timer schedule;
 int max = 100;
 int rngPer = 0;
-
-void update() {
-  flag = !flag;
-  nodes.forEach((node) {
-    node.children.forEach((k, n) {
-      if (n.hasSubscriber) {
-        n.updateValue(flag ? 1 : 0);
-      }
-    });
-  });
-}
-
-bool flag = false;
 
 Random random = new Random();
 List<SimpleNode> nodes = [];

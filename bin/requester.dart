@@ -43,9 +43,13 @@ class BenchmarkRequester {
   }
 
   Future start() async {
+    print("A");
     link.connect();
+    print("b");
     requester = await link.onRequesterReady;
+    print("c");
     RemoteNode watchNode = await getRemoteNode(path);
+    print("d");
 
     var count = 0;
     var nc = 0;

@@ -4,4 +4,3 @@ dependencies:
   dslink:
     git:
       url: https://github.com/IOT-DSA/sdk-dslink-dart.git
-      ref: develop

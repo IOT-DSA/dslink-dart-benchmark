@@ -131,9 +131,7 @@ void update() {
   flag = !flag;
   nodes.forEach((node) {
     node.children.forEach((k, n) {
-      if (n.hasSubscriber) {
-        n.updateValue(flag ? 1 : 0);
-      }
+      (n as SimpleNode).updateValue(flag ? 1 : 0);
     });
   });
 }

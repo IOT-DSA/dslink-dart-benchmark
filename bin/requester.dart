@@ -49,7 +49,7 @@ main(List<String> args) async {
   var paths = [];
 
   for (var n in cn) {
-    if (!n.remotePath.startsWith("/downstream/Benchmark-")) {
+    if (!n.remotePath.startsWith("/downstream/Benchmark-") && n.remotePath != "/downstream/Benchmark") {
       continue;
     }
 
